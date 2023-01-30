@@ -1,14 +1,15 @@
 #include <Arduino.h>
-#include <TimerOne.h>
 
-#define CAR_PIEZO A0
-#define PED_PIEZO A1
+#define CAR_INTERRUPT 0 // Pin 2
+#define PED_INTERRUPT 1 // Pin 3
 
-const int PED_RED = 6;
-const int PED_GREEN = 5;
-const int MAIN_RED =4;
-const int MAIN_YELLOW = 3;
-const int MAIN_GREEN = 2;
+const int CAR_PLATE = 2;
+const int PED_PLATE = 3;
+const int PED_RED = 8;
+const int PED_GREEN = 7;
+const int MAIN_RED = 6;
+const int MAIN_YELLOW = 5;
+const int MAIN_GREEN = 4;
 const int CYCLES_BLINK = 6;
 volatile bool allowCross = false;
 volatile bool green = false;
@@ -17,7 +18,10 @@ unsigned long latestCross;
 unsigned long arrivalPed;
 unsigned long latestCar;
 
+/*
 void handleChecks() {
+	Serial.println(analogRead(PED_PIEZO));
+	Serial.println(analogRead(CAR_PIEZO));
 	if(analogRead(PED_PIEZO) > 1000 && !waitingPed && millis() - latestCross > 3000) {
     Serial.println("Pedestre detectado.");
 		waitingPed = true;
@@ -29,37 +33,56 @@ void handleChecks() {
 		latestCar = millis();
 	}
 }
+*/
+
+void handleCar() {
+	if (digitalRead(CAR_PLATE) == HIGH) {
+		Serial.println("Carro detectado");
+		latestCar = millis();
+	}
+	else {
+		// Possible addition to calculate speed
+	}
+}
+
+void handlePedestrian() {
+	if (digitalRead(PED_PLATE) == LOW && !waitingPed && millis() - latestCross > 3000) {
+		Serial.println("Pedestre detectado.");
+		waitingPed = true;
+		arrivalPed = millis();
+	}
+}
 
 void turnRed() {
-  digitalWrite(MAIN_GREEN, LOW);
-  digitalWrite(MAIN_YELLOW, HIGH);
-  delay(1500);
-  digitalWrite(MAIN_YELLOW, LOW);
-  digitalWrite(MAIN_RED, HIGH);
-  delay(100);
-  digitalWrite(PED_RED, LOW);
-  delay(100);
-  digitalWrite(PED_GREEN, HIGH);
+  	digitalWrite(MAIN_GREEN, HIGH);
+  	digitalWrite(MAIN_YELLOW, LOW);
+  	delay(1500);
+  	digitalWrite(MAIN_YELLOW, HIGH);
+  	digitalWrite(MAIN_RED, LOW);
+  	delay(100);
+  	digitalWrite(PED_RED, HIGH);
+  	delay(100);
+  	digitalWrite(PED_GREEN, LOW);
 }
 
 void blinkPedRed() {
-  digitalWrite(PED_GREEN, LOW);
+  	digitalWrite(PED_GREEN, HIGH);
 
-  for (int i = 0; i < CYCLES_BLINK; i++) {
-    digitalWrite(PED_RED, HIGH);
-    delay(150);
-    digitalWrite(PED_RED, LOW);
-    delay(150);
-  }
+  	for (int i = 0; i < CYCLES_BLINK; i++) {
+    	digitalWrite(PED_RED, LOW);
+    	delay(150);
+    	digitalWrite(PED_RED, HIGH);
+    	delay(150);
+  	}
 }
 
 void turnGreen() {
-  blinkPedRed();
-  delay(100);
-  digitalWrite(MAIN_RED, LOW);
-  digitalWrite(PED_RED, HIGH);
-  delay(200);
-  digitalWrite(MAIN_GREEN, HIGH);
+  	blinkPedRed();
+  	delay(100);
+  	digitalWrite(MAIN_RED, HIGH);
+  	digitalWrite(PED_RED, LOW);
+  	delay(200);
+  	digitalWrite(MAIN_GREEN, LOW);
 }
 
 void setup() {
@@ -67,22 +90,17 @@ void setup() {
 	pinMode(PED_GREEN, OUTPUT);
 	pinMode(MAIN_GREEN, OUTPUT);
 	pinMode(MAIN_YELLOW, OUTPUT);
-	pinMode(MAIN_GREEN, OUTPUT);
-	digitalWrite(PED_GREEN, LOW);
-	digitalWrite(PED_RED, LOW);
-	digitalWrite(MAIN_RED, LOW);
-	digitalWrite(MAIN_YELLOW, LOW);
-	digitalWrite(MAIN_GREEN, LOW);
-	pinMode(CAR_PIEZO, INPUT);
-	pinMode(PED_PIEZO, INPUT);
+	pinMode(MAIN_RED, OUTPUT);
+	pinMode(CAR_PLATE, INPUT_PULLUP);
+	pinMode(PED_PLATE, INPUT_PULLUP);
+	attachInterrupt(CAR_INTERRUPT, handleCar, CHANGE);
+	attachInterrupt(PED_INTERRUPT, handlePedestrian, FALLING);
+	digitalWrite(PED_GREEN, HIGH);
+	digitalWrite(PED_RED, HIGH);
+	digitalWrite(MAIN_RED, HIGH);
+	digitalWrite(MAIN_YELLOW, HIGH);
+	digitalWrite(MAIN_GREEN, HIGH);
 	Serial.begin(9600);
-
-	Serial.println("Inicializando...");
-	Serial.println("Por favor aguarde.");
-  Serial.println("Inicializacao concluida com sucesso!");
-
-	Timer1.initialize(100000);
-	Timer1.attachInterrupt(handleChecks);
 }
 
 void loop() {
