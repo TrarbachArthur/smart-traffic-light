@@ -15,22 +15,21 @@ O projeto consiste basicamente em um sistema de semáforos para uma pista de mã
 ## Descrição 
 
 <div>
-<p text-align: justify>O projeto utiliza de um arduino para o controle do semáforo e detecção de carros e pedestres, que é feita por meio do uso de piezômetros. A ideia principal do projeto é evitar o acúmulo de carros causado por semáforos fechados desnecessários, além de reduzir o tempo médio de espera por pedestre.</p>
+<p text-align: justify>O projeto utiliza de um arduino para o controle do semáforo e detecção de carros e pedestres, que é feita por meio do uso de placas de pressão. A ideia principal do projeto é evitar o acúmulo de carros causado por semáforos fechados desnecessários, além de reduzir o tempo médio de espera por pedestre.</p>
 </div>
 
 ## Componentes:
 - Arduino UNO
-- 2 Piezômetros
+- 2 Placas de pressão
 - 2 LEDs Vermelhos
 - 2 LEDs Verdes
 - 1 LED Amarelo
 - 2 Resistores de 330Ω
-- 2 Resistores de 1kΩ
 - Jumpers
 
 
 ## Esquemático
 <div>
-<img align="center" src=""/>
+<img align="center" src="./assets/Schematic.png"/>
 </div>
-<p><i>Under construction</i></p>
+<p><i>Os piezômetros utilizados no esquemático, na realidade, representam as placas de pressão que foram utilizadas.</i></p>
