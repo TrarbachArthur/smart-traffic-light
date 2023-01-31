@@ -3,6 +3,7 @@
 #define CAR_INTERRUPT 0 // Pin 2
 #define PED_INTERRUPT 1 // Pin 3
 
+// Defining used pins
 const int CAR_PLATE = 2;
 const int PED_PLATE = 3;
 const int PED_RED = 8;
@@ -10,30 +11,17 @@ const int PED_GREEN = 7;
 const int MAIN_RED = 6;
 const int MAIN_YELLOW = 5;
 const int MAIN_GREEN = 4;
+
 const int CYCLES_BLINK = 6;
+
 volatile bool allowCross = false;
 volatile bool green = false;
 volatile bool waitingPed = false;
+
+// Time related variables
 unsigned long latestCross;
 unsigned long arrivalPed;
 unsigned long latestCar;
-
-/*
-void handleChecks() {
-	Serial.println(analogRead(PED_PIEZO));
-	Serial.println(analogRead(CAR_PIEZO));
-	if(analogRead(PED_PIEZO) > 1000 && !waitingPed && millis() - latestCross > 3000) {
-    Serial.println("Pedestre detectado.");
-		waitingPed = true;
-		arrivalPed = millis();
-	}
-	
-	if(analogRead(CAR_PIEZO) > 900) {
-		Serial.println("Carro detectado");
-		latestCar = millis();
-	}
-}
-*/
 
 void handleCar() {
 	if (digitalRead(CAR_PLATE) == HIGH) {
@@ -86,6 +74,7 @@ void turnGreen() {
 }
 
 void setup() {
+
 	pinMode(PED_RED, OUTPUT);
 	pinMode(PED_GREEN, OUTPUT);
 	pinMode(MAIN_GREEN, OUTPUT);
@@ -93,8 +82,14 @@ void setup() {
 	pinMode(MAIN_RED, OUTPUT);
 	pinMode(CAR_PLATE, INPUT_PULLUP);
 	pinMode(PED_PLATE, INPUT_PULLUP);
+
+	// Defined to change to make speed checks possible
 	attachInterrupt(CAR_INTERRUPT, handleCar, CHANGE);
+
 	attachInterrupt(PED_INTERRUPT, handlePedestrian, FALLING);
+
+	// All LEDs start turned off
+	// LEDs are connected directly to the 5V output
 	digitalWrite(PED_GREEN, HIGH);
 	digitalWrite(PED_RED, HIGH);
 	digitalWrite(MAIN_RED, HIGH);
