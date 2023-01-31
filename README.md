@@ -1,6 +1,6 @@
 # SMART TRAFFIC LIGHT
 <div align="center">
-<p>A apresentacao do projeto pode ser encontrada aqui --> <a href="">Smart traffic light</a></p>
+<p>A apresentacao do projeto pode ser encontrada aqui --> <a href="https://youtu.be/3SpieXDKzFk">Smart traffic light</a></p>
 </div>
 <div>
 <p><b>Realizado por: Arthur Trarbach Sampaio, Jordano Furtado de Souza, Nathan Garcia Freitas</b>
@@ -15,7 +15,7 @@ O projeto consiste basicamente em um sistema de semáforos para uma pista de mã
 ## Descrição 
 
 <div>
-<p text-align: justify>O projeto utiliza de um arduino para o controle do semáforo e detecção de carros e pedestres, que é feita por meio do uso de placas de pressão. A ideia principal do projeto é evitar o acúmulo de carros causado por semáforos fechados desnecessários, além de reduzir o tempo médio de espera por pedestre.</p>
+<p text-align: justify>O projeto utiliza de um arduino para o controle do semáforo e detecção de carros e pedestres, que é feita por meio do uso de placas de pressão. A ideia principal do projeto é evitar o acúmulo de carros causado por semáforos fechados desnecessários, além de reduzir o tempo médio de espera por pedestre. Isso é feito utilizando as informações coletadas pelas placas de pressão para decidir se é válido, ou não, fechar o semáforo.</p>
 </div>
 
 ## Componentes:
